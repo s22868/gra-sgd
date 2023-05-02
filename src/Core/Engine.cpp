@@ -3,6 +3,7 @@
 //
 
 #include "Engine.h"
+#include "../Textures/TextureManager.h"
 
 Engine *Engine::s_Instance = nullptr;
 
@@ -28,10 +29,16 @@ bool Engine::Init() {
         return false;
     }
 
+    TextureManager::GetInstance()->Load("test", "test.bmp");
+
     return isRunning = true;
 }
 
 bool Engine::Clean() {
+    TextureManager::GetInstance()->Clean();
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
     return false;
 }
 
@@ -46,6 +53,9 @@ void Engine::Update() {
 void Engine::Render() {
     SDL_SetRenderDrawColor(renderer, 124, 218, 254, 255);
     SDL_RenderClear(renderer);
+
+    TextureManager::GetInstance()->Draw("test", 100, 100, 742,349);
+
     SDL_RenderPresent(renderer);
 }
 

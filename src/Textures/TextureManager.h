@@ -8,7 +8,6 @@
 #include <string>
 #include <map>
 #include "SDL.h"
-#include "SDL_test_images.h"
 
 //singleton
 
@@ -27,8 +26,8 @@ public:
     void Draw(std::string id, int x, int y, int width, int height, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
 private:
-    TextureManager(){};
-    std::map<std::string, SDL_Texture*> textureMap;
+    TextureManager() {};
+    std::map<std::string, SDL_Texture *> textureMap;
     static TextureManager *s_Instance;
 };
 
