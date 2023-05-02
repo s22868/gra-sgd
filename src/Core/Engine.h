@@ -6,7 +6,6 @@
 #define GRASGD_ENGINE_H
 
 #include <SDL.h>
-#include <SDL_test_images.h>
 
 #define SCREEN_WIDTH 960
 #define SCREEN_HEIGHT 640

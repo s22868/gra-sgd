@@ -1,9 +1,10 @@
 #define SDL_MAIN_HANDLED
-#include "Core/Engine.h"
+
+#include "src/Core/Engine.h"
 
 int main() {
     Engine::GetInstance()->Init();
-    while(Engine::GetInstance()->IsRunning()){
+    while (Engine::GetInstance()->IsRunning()) {
         Engine::GetInstance()->Events();
         Engine::GetInstance()->Update();
         Engine::GetInstance()->Render();
