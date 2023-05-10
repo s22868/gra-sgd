@@ -1,6 +1,7 @@
 #define SDL_MAIN_HANDLED
 
-#include "src/Core/Engine.h"
+#include "src/Engine/Engine.h"
+#include "src/Time/Time.h"
 
 int main() {
     Engine::GetInstance()->Init();
@@ -8,6 +9,7 @@ int main() {
         Engine::GetInstance()->Events();
         Engine::GetInstance()->Update();
         Engine::GetInstance()->Render();
+        Time::GetInstance()->Tick();
     }
     Engine::GetInstance()->Clean();
 
