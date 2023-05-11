@@ -11,6 +11,7 @@
 #include "../Hero/Camera.h"
 #include "../Collecting/Score.h"
 #include "../Collision/CollisionHandler.h"
+#include "../Text/TextManager.h"
 
 
 Engine *Engine::s_Instance = nullptr;
@@ -47,6 +48,7 @@ bool Engine::Init() {
         return false;
     }
 
+    TextManager::GetInstance()->Load("level", "LEVEL-" + std::to_string(currentLevel), {0, 0, 0});
 
     TextureManager::GetInstance()->Load("bg", "test.bmp");
 
@@ -75,6 +77,7 @@ bool Engine::Init() {
 
 bool Engine::Clean() {
     TextureManager::GetInstance()->Clean();
+    TextManager::GetInstance()->Clean();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
@@ -106,43 +109,11 @@ void Engine::Render() {
 
     TextureManager::GetInstance()->DrawBg("bg", 100, 100, 742, 349);
 
+    TextManager::GetInstance()->Draw("level", 10, 10);
+
     score->Draw();
 
     level->Render();
-
-    //currentLevel font
-    //TODO: add current level text info
-//    TTF_Font* font;
-//
-//    font = TTF_OpenFont("t_n_r.ttf", 24);
-//    if ( !font ) {
-//        SDL_Log("Failed to load font: %s", TTF_GetError());
-//    }
-//
-//    SDL_Surface* text;
-//// Set color to black
-//    SDL_Color color = { 0, 0, 0 };
-//
-//    char textLevel[20];
-//
-//    sprintf(textLevel, "LEVEL-%d", currentLevel);
-//
-//    text = TTF_RenderText_Solid( font, textLevel, color );
-//    if ( !text ) {
-//        SDL_Log( "Failed to render text: %s", TTF_GetError());
-//    }
-//
-//    SDL_Texture* text_texture;
-//
-//    text_texture = SDL_CreateTextureFromSurface( renderer, text );
-//
-//    SDL_Rect dest = { 0, 0, text->w, text->h };
-//    SDL_Rect src = { 830, 20, text->w, text->h };
-//
-//    SDL_RenderCopy( renderer, text_texture, &dest, &src );
-//
-//    SDL_DestroyTexture( text_texture );
-//    SDL_FreeSurface( text );
 
     player->Draw();
 
@@ -159,5 +130,6 @@ void Engine::NextLevel() {
     score->Next("LEVEL-" + std::to_string(currentLevel));
     player->transform->Set(20, 400);
     level = MapParser::GetInstance()->GetMap("LEVEL-" + std::to_string(currentLevel));
+    TextManager::GetInstance()->Load("level", "LEVEL-" + std::to_string(currentLevel), {0, 0, 0});
     CollisionHandler::GetInstance()->UpdateMapCollision();
 }
