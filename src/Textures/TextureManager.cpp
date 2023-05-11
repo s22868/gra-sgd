@@ -26,6 +26,14 @@ bool TextureManager::Load(std::string id, std::string filename) {
 }
 
 void TextureManager::Draw(std::string id, int x, int y, int width, int height, SDL_RendererFlip flip) {
+    Vector2D cam = Camera::GetInstance()->GetPosition();
+    SDL_Rect dstRect = {int(x-cam.X), int(y-cam.Y), width, height};
+
+    SDL_Rect srcRect = {0, 0, width, height};
+    SDL_RenderCopyEx(Engine::GetInstance()->GetRenderer(), textureMap[id], &srcRect, &dstRect, 0, nullptr, flip);
+}
+
+void TextureManager::DrawBg(std::string id, int x, int y, int width, int height, SDL_RendererFlip flip) {
     Vector2D cam = Camera::GetInstance()->GetPosition()*0.3;
 
     SDL_Rect dstRect = {int(x-cam.X), int(y-cam.Y), width, height};

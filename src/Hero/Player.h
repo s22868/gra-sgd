@@ -26,6 +26,8 @@ public:
 
     virtual void AnimationHandler();
 
+    Collider* collider;
+
 private:
     bool isRunning;
     bool isJumping;
@@ -37,7 +39,6 @@ private:
     Animation* animation;
     RigidBody* rigidBody;
 
-    Collider* collider;
     Vector2D lastSafePosition;
 };
 

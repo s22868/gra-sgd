@@ -17,9 +17,6 @@ void Camera::Update(float dt) {
         if (viewRectangle.y < 0) {
             viewRectangle.y = 0;
         }
-        if (viewRectangle.x > (2 * SCREEN_WIDTH - viewRectangle.w)) {
-            viewRectangle.x = (2 * SCREEN_WIDTH - viewRectangle.w);
-        }
         if (viewRectangle.y > (SCREEN_HEIGHT - viewRectangle.h)) {
             viewRectangle.y = (SCREEN_HEIGHT - viewRectangle.h);
         }

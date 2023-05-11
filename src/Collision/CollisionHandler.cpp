@@ -10,6 +10,10 @@ CollisionHandler::CollisionHandler() {
     collisionTilemapLayer = collisionTileLayer->GetTileMap();
 }
 
+void CollisionHandler::UpdateMapCollision() {
+    collisionTileLayer = (Tile *) Engine::GetInstance()->GetMap()->GetMapLayers().front();
+    collisionTilemapLayer = collisionTileLayer->GetTileMap();
+}
 
 bool CollisionHandler::CheckCollision(SDL_Rect a, SDL_Rect b) {
     bool x_overlap = (a.x < b.x + b.w) && (a.x + a.w > b.x);
@@ -21,7 +25,7 @@ bool CollisionHandler::MapCollision(SDL_Rect a) {
 
     int tileSize = 32;
     int numRows = 20;
-    int numCols = 60;
+//    int numCols = 60;
 
     int leftTile = a.x / tileSize;
     int rightTile = (a.x + a.w) / tileSize;
@@ -30,7 +34,7 @@ bool CollisionHandler::MapCollision(SDL_Rect a) {
     int bottomTile = (a.y + a.h) / tileSize;
 
     if (leftTile < 0) leftTile = 0;
-    if (rightTile > numCols) rightTile = numCols;
+//    if (rightTile > numCols) rightTile = numCols;
 
     if (topTile < 0) topTile = 0;
     if (bottomTile > numRows) bottomTile = numRows;

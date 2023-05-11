@@ -11,6 +11,8 @@ public:
 
     bool MapCollision(SDL_Rect a);
 
+    void UpdateMapCollision();
+
     inline static CollisionHandler *GetInstance() {
         return s_Instance = (s_Instance != nullptr) ? s_Instance : new CollisionHandler();
     }

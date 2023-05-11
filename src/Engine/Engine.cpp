@@ -9,10 +9,13 @@
 #include "../Time/Time.h"
 #include "../Map/MapParser.h"
 #include "../Hero/Camera.h"
+#include "../Collecting/Score.h"
+#include "../Collision/CollisionHandler.h"
 
 
 Engine *Engine::s_Instance = nullptr;
 Player *player = nullptr;
+Score *score = nullptr;
 
 bool Engine::Init() {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -20,7 +23,7 @@ bool Engine::Init() {
         return false;
     }
 
-    if(TTF_Init() < 0){
+    if (TTF_Init() < 0) {
         SDL_Log("Nie udalo sie zaldować SDL_ttf, %s", TTF_GetError());
         return false;
     }
@@ -46,7 +49,7 @@ bool Engine::Init() {
 
     TextureManager::GetInstance()->Load("bg", "test.bmp");
 
-    if(!MapParser::GetInstance()->Load()){
+    if (!MapParser::GetInstance()->Load()) {
         SDL_Log("Nie udalo sie zaladowac mapy");
     }
 
@@ -54,11 +57,15 @@ bool Engine::Init() {
 
     TextureManager::GetInstance()->Load("player_idle", "player-idle.bmp");
     TextureManager::GetInstance()->Load("player_run", "player-run.bmp");
+
+
     //TODO: Jump animation
 
 //    TextureManager::GetInstance()->Load("player_jump", "player-jump.bmp");
 
     player = new Player(new Props("player_idle", 20, 400, 64, 32));
+    score = new Score(new Props("fish", 100, 450, 32, 32));
+    TextureManager::GetInstance()->Load("fish", "fish.bmp");
 
     Camera::GetInstance()->SetTarget(player->GetOrigin());
 
@@ -80,7 +87,16 @@ bool Engine::Quit() {
 void Engine::Update() {
     float dt = Time::GetInstance()->GetDeltaTime();
     //TODO: create update function or remove it
-//    level->Update();
+    level->Update();
+    score->Update(dt);
+
+    if(CollisionHandler::GetInstance()->CheckCollision(player->collider->Get(), score->collider->Get())){
+        score->Next();
+        player->transform->Set(20, 400);
+        level = MapParser::GetInstance()->GetMap("LEVEL-2");
+        CollisionHandler::GetInstance()->UpdateMapCollision();
+    }
+
     player->Update(dt);
     Camera::GetInstance()->Update(dt);
 }
@@ -89,7 +105,9 @@ void Engine::Render() {
     SDL_SetRenderDrawColor(renderer, 124, 218, 254, 255);
     SDL_RenderClear(renderer);
 
-    TextureManager::GetInstance()->Draw("bg", 100, 100, 742, 349);
+    TextureManager::GetInstance()->DrawBg("bg", 100, 100, 742, 349);
+
+    score->Draw();
 
     level->Render();
 
@@ -124,7 +142,6 @@ void Engine::Render() {
 //    SDL_FreeSurface( text );
 
     player->Draw();
-
 
 
     SDL_RenderPresent(renderer);

@@ -21,6 +21,12 @@ public:
         X += v.X;
         Y += v.Y;
     }
+
+    inline void Set(float x, float y) {
+        X = x;
+        Y = y;
+    };
+
 };
 
 #endif //GRASGD_TRANSFORM_H

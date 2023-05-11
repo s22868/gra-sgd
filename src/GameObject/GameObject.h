@@ -49,9 +49,9 @@ public:
 
     virtual void Update(float dt) = 0;
 
+    Transform *transform;
 protected:
     Point* origin;
-    Transform *transform;
     int width, height;
     std::string textureId;
     SDL_RendererFlip flip;

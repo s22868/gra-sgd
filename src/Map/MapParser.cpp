@@ -3,7 +3,7 @@
 MapParser *MapParser::s_Instance = nullptr;
 
 bool MapParser::Load() {
-    return Parse("LEVEL-1", "assets/maps/map.tmx");
+    return Parse("LEVEL-1", "assets/maps/level-1.tmx") && Parse("LEVEL-2", "assets/maps/level-2.tmx");
 }
 
 
@@ -68,7 +68,7 @@ Tile *MapParser::ParseTile(TiXmlElement *xmlLayer, TilesetsList tilesets, int ti
         }
     }
 
-    //Parse Layer tile map  ----        matrix-> 0,0,0,id,0,id,0,id -> map.tmx Layer
+    //Parse Layer tile map  ----        matrix-> 0,0,0,id,0,id,0,id -> level-1.tmx Layer
     std::string matrix(data->GetText());
     std::istringstream iss(matrix);
     std::string id;
