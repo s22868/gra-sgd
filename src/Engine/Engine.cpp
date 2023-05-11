@@ -18,6 +18,7 @@ Engine *Engine::s_Instance = nullptr;
 Player *player = nullptr;
 Score *score = nullptr;
 int currentLevel = 1;
+int deaths = 0;
 
 bool Engine::Init() {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -48,7 +49,8 @@ bool Engine::Init() {
         return false;
     }
 
-    TextManager::GetInstance()->Load("level", "LEVEL-" + std::to_string(currentLevel), {0, 0, 0});
+    TextManager::GetInstance()->Load("level", "LEVEL:" + std::to_string(currentLevel), {0, 0, 0});
+    TextManager::GetInstance()->Load("deaths", "DEATHS:" + std::to_string(deaths), {255, 111, 51});
 
     TextureManager::GetInstance()->Load("bg", "test.bmp");
 
@@ -110,6 +112,7 @@ void Engine::Render() {
     TextureManager::GetInstance()->DrawBg("bg", 100, 100, 742, 349);
 
     TextManager::GetInstance()->Draw("level", 10, 10);
+    TextManager::GetInstance()->Draw("deaths", 700, 10);
 
     score->Draw();
 
@@ -130,6 +133,14 @@ void Engine::NextLevel() {
     score->Next("LEVEL-" + std::to_string(currentLevel));
     player->transform->Set(20, 400);
     level = MapParser::GetInstance()->GetMap("LEVEL-" + std::to_string(currentLevel));
-    TextManager::GetInstance()->Load("level", "LEVEL-" + std::to_string(currentLevel), {0, 0, 0});
+    TextManager::GetInstance()->Remove("level");
+    TextManager::GetInstance()->Load("level", "LEVEL:" + std::to_string(currentLevel), {0, 0, 0});
     CollisionHandler::GetInstance()->UpdateMapCollision();
+}
+
+void Engine::RestartLevel() {
+    deaths++;
+    player->transform->Set(20, 400);
+    TextManager::GetInstance()->Remove("deaths");
+    TextManager::GetInstance()->Load("deaths", "DEATHS:" + std::to_string(deaths), {255, 111, 51});
 }

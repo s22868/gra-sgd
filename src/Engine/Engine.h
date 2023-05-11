@@ -27,6 +27,7 @@ public:
     void Events();
 
     void NextLevel();
+    void RestartLevel();
 
     inline GameMap* GetMap(){
         return level;

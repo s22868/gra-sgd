@@ -1,6 +1,7 @@
 
 #include "CollisionHandler.h"
 #include "../Engine/Engine.h"
+#include "iostream"
 
 CollisionHandler *CollisionHandler::s_Instance = nullptr;
 
@@ -41,6 +42,17 @@ bool CollisionHandler::MapCollision(SDL_Rect a) {
 
     for (int i = leftTile; i <= rightTile; ++i) {
         for (int j = topTile; j <= bottomTile; ++j) {
+
+            //prohibiting the player from going behind the map on the left
+            if (a.x < 0) {
+                return true;
+            }
+            //if player falls of the map
+            if (j == numRows) {
+                Engine::GetInstance()->RestartLevel();
+                //false bcs Player update method will transform player to y = 1 - last safe position
+                return false;
+            }
             if (collisionTilemapLayer[j][i] > 0) {
                 return true;
             }
