@@ -16,6 +16,7 @@
 Engine *Engine::s_Instance = nullptr;
 Player *player = nullptr;
 Score *score = nullptr;
+int currentLevel = 1;
 
 bool Engine::Init() {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -53,19 +54,19 @@ bool Engine::Init() {
         SDL_Log("Nie udalo sie zaladowac mapy");
     }
 
-    level = MapParser::GetInstance()->GetMap("LEVEL-1");
+    level = MapParser::GetInstance()->GetMap("LEVEL-" + std::to_string(currentLevel));
 
     TextureManager::GetInstance()->Load("player_idle", "player-idle.bmp");
     TextureManager::GetInstance()->Load("player_run", "player-run.bmp");
 
-
+    TextureManager::GetInstance()->Load("fish", "fish.bmp");
     //TODO: Jump animation
 
 //    TextureManager::GetInstance()->Load("player_jump", "player-jump.bmp");
 
-    player = new Player(new Props("player_idle", 20, 400, 64, 32));
-    score = new Score(new Props("fish", 100, 450, 32, 32));
-    TextureManager::GetInstance()->Load("fish", "fish.bmp");
+    player = new Player(new Props("player_idle", 20, 416, 64, 32));
+    score = new Score(new Props("fish", 900, 450, 32, 32));
+
 
     Camera::GetInstance()->SetTarget(player->GetOrigin());
 
@@ -90,15 +91,13 @@ void Engine::Update() {
     level->Update();
     score->Update(dt);
 
-    if(CollisionHandler::GetInstance()->CheckCollision(player->collider->Get(), score->collider->Get())){
-        score->Next();
-        player->transform->Set(20, 400);
-        level = MapParser::GetInstance()->GetMap("LEVEL-2");
-        CollisionHandler::GetInstance()->UpdateMapCollision();
+    if (CollisionHandler::GetInstance()->CheckCollision(player->collider->Get(), score->collider->Get())) {
+        NextLevel();
     }
 
     player->Update(dt);
     Camera::GetInstance()->Update(dt);
+
 }
 
 void Engine::Render() {
@@ -111,8 +110,8 @@ void Engine::Render() {
 
     level->Render();
 
-    //test font
-    //TODO: add score gameobject
+    //currentLevel font
+    //TODO: add current level text info
 //    TTF_Font* font;
 //
 //    font = TTF_OpenFont("t_n_r.ttf", 24);
@@ -124,7 +123,11 @@ void Engine::Render() {
 //// Set color to black
 //    SDL_Color color = { 0, 0, 0 };
 //
-//    text = TTF_RenderText_Solid( font, "0 pkt", color );
+//    char textLevel[20];
+//
+//    sprintf(textLevel, "LEVEL-%d", currentLevel);
+//
+//    text = TTF_RenderText_Solid( font, textLevel, color );
 //    if ( !text ) {
 //        SDL_Log( "Failed to render text: %s", TTF_GetError());
 //    }
@@ -134,7 +137,7 @@ void Engine::Render() {
 //    text_texture = SDL_CreateTextureFromSurface( renderer, text );
 //
 //    SDL_Rect dest = { 0, 0, text->w, text->h };
-//    SDL_Rect src = { 870, 20, text->w, text->h };
+//    SDL_Rect src = { 830, 20, text->w, text->h };
 //
 //    SDL_RenderCopy( renderer, text_texture, &dest, &src );
 //
@@ -149,4 +152,12 @@ void Engine::Render() {
 
 void Engine::Events() {
     InputHandler::GetInstance()->Listen();
+}
+
+void Engine::NextLevel() {
+    currentLevel++;
+    score->Next("LEVEL-" + std::to_string(currentLevel));
+    player->transform->Set(20, 400);
+    level = MapParser::GetInstance()->GetMap("LEVEL-" + std::to_string(currentLevel));
+    CollisionHandler::GetInstance()->UpdateMapCollision();
 }

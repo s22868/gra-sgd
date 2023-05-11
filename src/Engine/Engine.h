@@ -26,6 +26,8 @@ public:
     void Render();
     void Events();
 
+    void NextLevel();
+
     inline GameMap* GetMap(){
         return level;
     }

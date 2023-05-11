@@ -6,8 +6,10 @@
 #define GRASGD_SCORE_H
 
 
+#include <map>
 #include "../GameObject/GameObject.h"
 #include "../Collision/Collider.h"
+
 
 class Score : public GameObject {
 public:
@@ -19,11 +21,12 @@ public:
 
     virtual void Update(float dt);
 
-    virtual void Next();
+    virtual void Next(std::string level);
 
     Collider *collider;
 
 private:
+    std::map<std::string, Point *> winningCords;
 };
 
 
