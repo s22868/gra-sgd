@@ -11,8 +11,9 @@
 #include "../Physics/RigidBody.h"
 #include "../Collision/Collider.h"
 
-#define JUMP_TIME 15.0f;
-#define JUMP_FORCE 10.0f;
+#define JUMP_TIME 15.0f
+#define JUMP_FORCE 20.0f
+#define MOVE_FORCE 13.0f
 
 class Player : public Hero {
 public:

@@ -21,7 +21,7 @@ Player::Player(Props *props) : Hero(props) {
     collider->setPadding(-20, -8, 40, 0);
 
     rigidBody = new RigidBody();
-    rigidBody->SetGravity(3.0f);
+    rigidBody->SetGravity(7.5f);
 
     animation = new Animation();
     animation->SetProps(textureId, 1, 8, 160);
@@ -46,12 +46,12 @@ void Player::Update(float dt) {
 
     //move
     if (InputHandler::GetInstance()->GetKeyDown(SDL_SCANCODE_A)) {
-        rigidBody->ApplyForceX(-10);
+        rigidBody->ApplyForceX(-MOVE_FORCE);
         flip = SDL_FLIP_HORIZONTAL;
         isRunning = true;
     }
     if (InputHandler::GetInstance()->GetKeyDown(SDL_SCANCODE_D)) {
-        rigidBody->ApplyForceX(10);
+        rigidBody->ApplyForceX(MOVE_FORCE);
         flip = SDL_FLIP_NONE;
         isRunning = true;
     }
@@ -67,7 +67,7 @@ void Player::Update(float dt) {
         rigidBody->ApplyForceY(-jumpForce);
     } else {
         isJumping = false;
-        jumpTime = JUMP_TIME
+        jumpTime = JUMP_TIME;
     }
 
 
