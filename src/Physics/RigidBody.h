@@ -17,11 +17,6 @@ public:
 
     inline void SetGravity(float gravityParam) { gravity = gravityParam; }
 
-
-    inline void ApplyForce(Vector2D forceParam) {
-        force = forceParam;
-    }
-
     inline void ApplyForceX(float forceX) {
         force.X = forceX;
     }

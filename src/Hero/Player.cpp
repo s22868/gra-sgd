@@ -45,7 +45,6 @@ void Player::Update(float dt) {
 //    animation->SetProps(textureId, 1, 8, 160);
 
     rigidBody->RemoveForce();
-
     isRunning = false;
 //    origin->Log();
     //move
@@ -90,13 +89,10 @@ void Player::Update(float dt) {
     //move on Y
     rigidBody->Update(dt);
     lastSafePosition.Y = transform->Y;
-    std::cout << "rigidPosition: " << rigidBody->GetPosition().Y << std::endl;
-
     //handle weird bug TODO: check whats wrong
-    if(rigidBody->GetPosition().Y < 5000){
+    if (rigidBody->GetPosition().Y < 5000) {
         transform->Y += rigidBody->GetPosition().Y;
     }
-    std::cout << "transfrom" << transform->Y << std::endl;
     collider->Set(transform->X, transform->Y, 64, 24);
     if (CollisionHandler::GetInstance()->MapCollision(collider->Get())) {
         isGrounded = true;
