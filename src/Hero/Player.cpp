@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "../Textures/TextureManager.h"
 #include "../InputHandler/InputHandler.h"
+#include "../Sound/SoundManager.h"
 #include "Camera.h"
 #include "../Collision/CollisionHandler.h"
 
@@ -59,6 +60,7 @@ void Player::Update(float dt) {
     //jump
     if (InputHandler::GetInstance()->GetKeyDown(SDL_SCANCODE_W) && isGrounded) {
         isJumping = true;
+        SoundManager::GetInstance()->PlaySound("jump");
 //        isGrounded = false;
         rigidBody->ApplyForceY(-jumpForce);
     }

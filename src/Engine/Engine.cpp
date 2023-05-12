@@ -2,6 +2,7 @@
 // Created by Mateusz on 02.05.2023.
 //
 
+#include <SDL_mixer.h>
 #include "Engine.h"
 #include "../Textures/TextureManager.h"
 #include "../Hero/Player.h"
@@ -12,6 +13,7 @@
 #include "../Collecting/Score.h"
 #include "../Collision/CollisionHandler.h"
 #include "../Text/TextManager.h"
+#include "../Sound/SoundManager.h"
 
 
 Engine *Engine::s_Instance = nullptr;
@@ -28,6 +30,11 @@ bool Engine::Init() {
 
     if (TTF_Init() < 0) {
         SDL_Log("Nie udalo sie zaldować SDL_ttf, %s", TTF_GetError());
+        return false;
+    }
+
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) < 0) {
+        SDL_Log("Error initializing SDL_mixer: ", Mix_GetError());
         return false;
     }
 
@@ -49,10 +56,15 @@ bool Engine::Init() {
         return false;
     }
 
+    SoundManager::GetInstance()->PlayMusic();
+    SoundManager::GetInstance()->Load("next_level", "next_level.wav");
+    SoundManager::GetInstance()->Load("dead", "dead.wav");
+    SoundManager::GetInstance()->Load("jump", "jump.wav");
+
     TextManager::GetInstance()->Load("level", "LEVEL:" + std::to_string(currentLevel), {0, 0, 0});
     TextManager::GetInstance()->Load("deaths", "DEATHS:" + std::to_string(deaths), {255, 111, 51});
 
-    TextureManager::GetInstance()->Load("bg", "test.bmp");
+    TextureManager::GetInstance()->Load("bg", "tutorial.bmp");
 
     if (!MapParser::GetInstance()->Load()) {
         SDL_Log("Nie udalo sie zaladowac mapy");
@@ -80,8 +92,11 @@ bool Engine::Init() {
 bool Engine::Clean() {
     TextureManager::GetInstance()->Clean();
     TextManager::GetInstance()->Clean();
+    SoundManager::GetInstance()->Clean();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    Mix_Quit();
+    TTF_Quit();
     SDL_Quit();
     return false;
 }
@@ -95,11 +110,10 @@ void Engine::Update() {
     //TODO: create update function or remove it
     level->Update();
     score->Update(dt);
-
+    SoundManager::GetInstance()->Update();
     if (CollisionHandler::GetInstance()->CheckCollision(player->collider->Get(), score->collider->Get())) {
         NextLevel();
     }
-
     player->Update(dt);
     Camera::GetInstance()->Update(dt);
 
@@ -130,6 +144,7 @@ void Engine::Events() {
 
 void Engine::NextLevel() {
     currentLevel++;
+    SoundManager::GetInstance()->PlaySound("next_level");
     score->Next("LEVEL-" + std::to_string(currentLevel));
     player->transform->Set(20, 400);
     level = MapParser::GetInstance()->GetMap("LEVEL-" + std::to_string(currentLevel));
@@ -140,6 +155,7 @@ void Engine::NextLevel() {
 
 void Engine::RestartLevel() {
     deaths++;
+    SoundManager::GetInstance()->PlaySound("dead");
     player->transform->Set(20, 400);
     TextManager::GetInstance()->Remove("deaths");
     TextManager::GetInstance()->Load("deaths", "DEATHS:" + std::to_string(deaths), {255, 111, 51});
