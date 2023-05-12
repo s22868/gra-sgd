@@ -1,6 +1,9 @@
 #ifndef GRASGD_POINT_H
 #define GRASGD_POINT_H
 
+#include <string>
+#include <iostream>
+
 class Point {
 public:
     float X, Y;
@@ -29,6 +32,10 @@ public:
 
     inline Point operator*(const float scalar) const {
         return Point(X * scalar, Y * scalar);
+    }
+//debuging player not visible on screen on start
+    void Log() {
+        std::cout << "(X,Y) = " << "(" << X << ", " << Y << ")" << std::endl;
     }
 
 };

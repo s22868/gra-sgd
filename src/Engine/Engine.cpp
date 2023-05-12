@@ -83,7 +83,6 @@ bool Engine::Init() {
     player = new Player(new Props("player_idle", 20, 416, 64, 32));
     score = new Score(new Props("fish", 900, 450, 32, 32));
 
-
     Camera::GetInstance()->SetTarget(player->GetOrigin());
 
     return isRunning = true;

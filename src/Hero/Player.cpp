@@ -2,6 +2,7 @@
 // Created by Mateusz on 09.05.2023.
 //
 
+#include <iostream>
 #include "Player.h"
 #include "../Textures/TextureManager.h"
 #include "../InputHandler/InputHandler.h"
@@ -42,9 +43,11 @@ void Player::Draw() {
 
 void Player::Update(float dt) {
 //    animation->SetProps(textureId, 1, 8, 160);
-    rigidBody->RemoveForce();
-    isRunning = false;
 
+    rigidBody->RemoveForce();
+
+    isRunning = false;
+//    origin->Log();
     //move
     if (InputHandler::GetInstance()->GetKeyDown(SDL_SCANCODE_A)) {
         rigidBody->ApplyForceX(-MOVE_FORCE);
@@ -80,20 +83,25 @@ void Player::Update(float dt) {
     transform->X += rigidBody->GetPosition().X;
     collider->Set(transform->X, transform->Y, 64, 24);
 
-    if(CollisionHandler::GetInstance()->MapCollision(collider->Get())){
+    if (CollisionHandler::GetInstance()->MapCollision(collider->Get())) {
         transform->X = lastSafePosition.X;
     }
 
     //move on Y
     rigidBody->Update(dt);
     lastSafePosition.Y = transform->Y;
-    transform->Y += rigidBody->GetPosition().Y;
-    collider->Set(transform->X, transform->Y,64,24);
+    std::cout << "rigidPosition: " << rigidBody->GetPosition().Y << std::endl;
 
-    if(CollisionHandler::GetInstance()->MapCollision(collider->Get())){
+    //handle weird bug TODO: check whats wrong
+    if(rigidBody->GetPosition().Y < 5000){
+        transform->Y += rigidBody->GetPosition().Y;
+    }
+    std::cout << "transfrom" << transform->Y << std::endl;
+    collider->Set(transform->X, transform->Y, 64, 24);
+    if (CollisionHandler::GetInstance()->MapCollision(collider->Get())) {
         isGrounded = true;
         transform->Y = lastSafePosition.Y;
-    }else{
+    } else {
         isGrounded = false;
     }
 
@@ -107,7 +115,7 @@ void Player::Update(float dt) {
 void Player::AnimationHandler() {
     animation->SetProps("player_idle", 1, 8, 160);
 
-    if(isRunning){
+    if (isRunning) {
         animation->SetProps("player_run", 1, 8, 160);
     }
 //    TODO:
