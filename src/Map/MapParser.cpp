@@ -3,7 +3,8 @@
 MapParser *MapParser::s_Instance = nullptr;
 
 bool MapParser::Load() {
-    return Parse("LEVEL-1", "assets/maps/level-1.tmx") && Parse("LEVEL-2", "assets/maps/level-2.tmx") && Parse("LEVEL-3", "assets/maps/level-1.tmx");
+    return Parse("LEVEL-1", "assets/maps/level-1.tmx") && Parse("LEVEL-2", "assets/maps/level-2.tmx") &&
+           Parse("LEVEL-3", "assets/maps/level-3.tmx");
 }
 
 

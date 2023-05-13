@@ -30,6 +30,7 @@ public:
     Collider* collider;
 
 private:
+    friend class Engine;
     bool isRunning;
     bool isJumping;
     bool isGrounded;

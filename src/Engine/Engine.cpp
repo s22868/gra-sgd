@@ -64,7 +64,7 @@ bool Engine::Init() {
     TextManager::GetInstance()->Load("level", "LEVEL:" + std::to_string(currentLevel), {0, 0, 0});
     TextManager::GetInstance()->Load("deaths", "DEATHS:" + std::to_string(deaths), {255, 111, 51});
 
-    TextureManager::GetInstance()->Load("bg", "tutorial.bmp");
+    TextureManager::GetInstance()->Load("bg", "maps/bg-1.bmp");
 
     if (!MapParser::GetInstance()->Load()) {
         SDL_Log("Nie udalo sie zaladowac mapy");
@@ -81,7 +81,7 @@ bool Engine::Init() {
 //    TextureManager::GetInstance()->Load("player_jump", "player-jump.bmp");
 
     player = new Player(new Props("player_idle", 20, 416, 64, 32));
-    score = new Score(new Props("fish", 900, 450, 32, 32));
+    score = new Score(new Props("fish", 900, 490, 32, 32));
 
     Camera::GetInstance()->SetTarget(player->GetOrigin());
 
@@ -122,7 +122,7 @@ void Engine::Render() {
     SDL_SetRenderDrawColor(renderer, 124, 218, 254, 255);
     SDL_RenderClear(renderer);
 
-    TextureManager::GetInstance()->DrawBg("bg", 100, 100, 742, 349);
+    TextureManager::GetInstance()->DrawBg("bg", 0, 0, 1980, SCREEN_HEIGHT);
 
     TextManager::GetInstance()->Draw("level", 10, 10);
     TextManager::GetInstance()->Draw("deaths", 700, 10);
@@ -150,6 +150,8 @@ void Engine::NextLevel() {
     TextManager::GetInstance()->Remove("level");
     TextManager::GetInstance()->Load("level", "LEVEL:" + std::to_string(currentLevel), {0, 0, 0});
     CollisionHandler::GetInstance()->UpdateMapCollision();
+    TextureManager::GetInstance()->Remove("bg");
+    TextureManager::GetInstance()->Load("bg", "/maps/bg-" + std::to_string(currentLevel) + ".bmp");
 }
 
 void Engine::RestartLevel() {

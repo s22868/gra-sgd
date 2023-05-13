@@ -10,8 +10,8 @@ Score::Score(Props *props) : GameObject(props) {
     collider = new Collider();
     collider->Set(transform->X, transform->Y, width, height);
     winningCords["LEVEL-1"] = new Point(transform->X, transform->Y);
-    winningCords["LEVEL-2"] = new Point(500, 600);
-    winningCords["LEVEL-3"] = new Point(700, 580);
+    winningCords["LEVEL-2"] = new Point(2816, 416);
+    winningCords["LEVEL-3"] = new Point(3744, 192);
 }
 
 void Score::Draw() {
