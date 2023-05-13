@@ -18,6 +18,7 @@ Player::Player(Props *props) : Hero(props) {
 
     jumpTime = JUMP_TIME;
     jumpForce = JUMP_FORCE;
+    jumpTimeReset = JUMP_TIME;
 
     collider = new Collider();
     collider->setPadding(-20, -8, 40, 0);
@@ -71,7 +72,7 @@ void Player::Update(float dt) {
         rigidBody->ApplyForceY(-jumpForce);
     } else {
         isJumping = false;
-        jumpTime = JUMP_TIME;
+        jumpTime = jumpTimeReset;
     }
 
 

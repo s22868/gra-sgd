@@ -35,6 +35,7 @@ private:
     bool isJumping;
     bool isGrounded;
 
+    float jumpTimeReset;
     float jumpTime;
     float jumpForce;
 

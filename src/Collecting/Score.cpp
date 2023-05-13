@@ -12,6 +12,8 @@ Score::Score(Props *props) : GameObject(props) {
     winningCords["LEVEL-1"] = new Point(transform->X, transform->Y);
     winningCords["LEVEL-2"] = new Point(2816, 416);
     winningCords["LEVEL-3"] = new Point(3744, 192);
+    winningCords["LEVEL-4"] = new Point(3232, 576);
+    winningCords["LEVEL-5"] = new Point(3680, 512);
 }
 
 void Score::Draw() {

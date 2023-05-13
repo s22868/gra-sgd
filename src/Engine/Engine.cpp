@@ -64,7 +64,7 @@ bool Engine::Init() {
     TextManager::GetInstance()->Load("level", "LEVEL:" + std::to_string(currentLevel), {0, 0, 0});
     TextManager::GetInstance()->Load("deaths", "DEATHS:" + std::to_string(deaths), {255, 111, 51});
 
-    TextureManager::GetInstance()->Load("bg", "maps/bg-1.bmp");
+    TextureManager::GetInstance()->Load("bg", "/maps/bg-" + std::to_string(currentLevel) + ".bmp");
 
     if (!MapParser::GetInstance()->Load()) {
         SDL_Log("Nie udalo sie zaladowac mapy");
@@ -76,12 +76,13 @@ bool Engine::Init() {
     TextureManager::GetInstance()->Load("player_run", "player-run.bmp");
 
     TextureManager::GetInstance()->Load("fish", "fish.bmp");
+
     //TODO: Jump animation
 
 //    TextureManager::GetInstance()->Load("player_jump", "player-jump.bmp");
 
     player = new Player(new Props("player_idle", 20, 416, 64, 32));
-    score = new Score(new Props("fish", 900, 490, 32, 32));
+    score = new Score(new Props("fish", 1856, 416, 32, 32));
 
     Camera::GetInstance()->SetTarget(player->GetOrigin());
 
@@ -127,10 +128,10 @@ void Engine::Render() {
     TextManager::GetInstance()->Draw("level", 10, 10);
     TextManager::GetInstance()->Draw("deaths", 700, 10);
 
-    score->Draw();
 
     level->Render();
 
+    score->Draw();
     player->Draw();
 
 
@@ -145,6 +146,13 @@ void Engine::NextLevel() {
     currentLevel++;
     SoundManager::GetInstance()->PlaySound("next_level");
     score->Next("LEVEL-" + std::to_string(currentLevel));
+    //TODO: handle it somewhere else, create methods to handle it, create methods to reset it
+    if (currentLevel == 5) {
+        player->rigidBody->SetGravity(2.5f);
+        player->jumpForce = 13.0f;
+        player->jumpTime = 30.0f;
+        player->jumpTimeReset = 30.0f;
+    }
     player->transform->Set(20, 400);
     level = MapParser::GetInstance()->GetMap("LEVEL-" + std::to_string(currentLevel));
     TextManager::GetInstance()->Remove("level");
